@@ -212,6 +212,7 @@ public partial class TicTacToeClientForm : Form
       } // end else if
       else if (message == "X Vinnur")
       {
+          Newg_button.Enabled = true;
           if (myMark == 'X')
           {
               DisplayMessage("Þú Vannst!" + "\r\n");
@@ -223,9 +224,11 @@ public partial class TicTacToeClientForm : Form
       }
       else if (message == "O Vinnur")
       {
+          Newg_button.Enabled = true;
           if (myMark == 'O')
           {
               DisplayMessage("Þú Vannst!" + "\r\n");
+              
           }
           else
           {
@@ -234,6 +237,7 @@ public partial class TicTacToeClientForm : Form
       }
       else if (message == "Jafntefli")
       {
+          Newg_button.Enabled = true;
           DisplayMessage("Jafntefli");
       }
       else
@@ -261,7 +265,14 @@ public partial class TicTacToeClientForm : Form
       {
          currentSquare = value;
       } // end set
-   } // end property CurrentSquare
+   }
+
+   private void Newg_button_Click(object sender, EventArgs e)
+   {
+       
+   }
+
+    // end property CurrentSquare
 } // end class TicTacToeClientForm
 
 /**************************************************************************
