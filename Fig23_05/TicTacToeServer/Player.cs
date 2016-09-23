@@ -116,14 +116,15 @@ namespace TicTacToeServer
                     server.DisplayMessage("loc: " + location + "\r\n");
                     writer.Write("Valid move.");
                 } // end if
-                else if (location != -1) // signal that the move is invalid
+                else if (location != -1 && server.GameOver() == null) // signal that the move is invalid
                     writer.Write("Invalid move, try again.");
 
                 // if game is over, set done to true to exit while loop
 
-                if (server.GameOver() != null)
+                if (server.GameOver() != null && location != -1)
                 {
                     writer.Write(server.GameOver());
+                    server.DisplayMessage(server.GameOver());
                 }
             } // end while loop
 

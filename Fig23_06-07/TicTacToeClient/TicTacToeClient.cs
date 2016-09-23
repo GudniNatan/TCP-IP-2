@@ -24,7 +24,8 @@ public partial class TicTacToeClientForm : Form
    private char myMark; // player's mark on the board                   
    private bool myTurn; // is it this player's turn?                    
    private SolidBrush brush; // brush for drawing X's and O's           
-   private bool done = false; // true when game is over                 
+   private bool done = false; // true when game is over           
+   private bool gameover = false;
 
    // initialize variables and thread for connecting to server
    private void TicTacToeClientForm_Load( object sender, EventArgs e )
@@ -143,21 +144,34 @@ public partial class TicTacToeClientForm : Form
    // draws the mark of each square
    public void PaintSquares()
    {
-      Graphics g;
+       lock (this)
+       {
+           Graphics g;
+           board0Panel.Refresh();
+           board1Panel.Refresh();
+           board2Panel.Refresh();
+           board3Panel.Refresh();
+           board4Panel.Refresh();
+           board5Panel.Refresh();
+           board6Panel.Refresh();
+           board7Panel.Refresh();
+           board8Panel.Refresh();
 
-      // draw the appropriate mark on each panel
-      for ( int row = 0; row < 3; row++ )
-      {
-         for ( int column = 0; column < 3; column++ )
-         {
-            // get the Graphics for each Panel                    
-            g = board[ row, column ].SquarePanel.CreateGraphics();
+           // draw the appropriate mark on each panel
+           for (int row = 0; row < 3; row++)
+           {
+               for (int column = 0; column < 3; column++)
+               {
+                   // get the Graphics for each Panel                    
+                   g = board[row, column].SquarePanel.CreateGraphics();
 
-            // draw the appropriate letter on the panel        
-            g.DrawString( board[ row, column ].Mark.ToString(),
-               board0Panel.Font, brush, 10, 8 );               
-         } // end for
-      } // end for
+                   // draw the appropriate letter on the panel        
+                   g.DrawString(board[row, column].Mark.ToString(),
+                      board0Panel.Font, brush, 10, 8);
+               } // end for
+           } // end for
+       }
+      
    } // end method PaintSquares
 
    // send location of the clicked square to server
@@ -240,33 +254,45 @@ public partial class TicTacToeClientForm : Form
       } // end else if
       else if (message == "X Vinnur")
       {
-          ToggleNewGButton();
-          if (myMark == 'X')
+          if (!gameover)
           {
-              DisplayMessage("Þú Vannst!" + "\r\n");
+              ToggleNewGButton();
+
+              if (myMark == 'X')
+              {
+                  DisplayMessage("Þú Vannst!" + "\r\n");
+              }
+              else
+              {
+                  DisplayMessage("Þú tapaðir" + "\r\n");
+              }
           }
-          else
-          {
-              DisplayMessage("Þú tapaðir" + "\r\n");
-          }
+          gameover = true;
       }
       else if (message == "O Vinnur")
       {
-          ToggleNewGButton();
-          if (myMark == 'O')
+          if (!gameover)
           {
-              DisplayMessage("Þú Vannst!" + "\r\n");
-              
+              if (myMark == 'O')
+              {
+                  DisplayMessage("Þú Vannst!" + "\r\n");
+
+              }
+              else
+              {
+                  DisplayMessage("Þú tapaðir" + "\r\n");
+              }
           }
-          else
-          {
-              DisplayMessage("Þú tapaðir" + "\r\n");
-          }
+          gameover = true;
       }
       else if (message == "Jafntefli")
       {
-          ToggleNewGButton();
-          DisplayMessage("Jafntefli");
+          if (!gameover)
+          {
+              ToggleNewGButton();
+              DisplayMessage("Jafntefli");
+          }
+          gameover = true;
       }
       else if (message == "RESTART")
       {
@@ -306,7 +332,26 @@ public partial class TicTacToeClientForm : Form
 
    public void Restart()
    {
+       gameover = false;
+       if (myMark == 'X')
+       {
+           myTurn = true;   
+       }
+       else
+       {
+           myTurn = false;
+       }
        ToggleNewGButton();
+       DisplayMessage("Restarted");
+
+       for (int i = 0; i < 3; i++)
+       {
+           for (int j = 0; j < 3; j++)
+           {
+               board[i, j].Mark = ' ';
+           }
+       }
+
    }
     // end property CurrentSquare
 } // end class TicTacToeClientForm

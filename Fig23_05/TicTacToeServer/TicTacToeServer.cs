@@ -108,7 +108,7 @@ namespace TicTacToeServer
                     Monitor.Wait(this);
 
                 // if the desired square is not occupied
-                if (!IsOccupied(location))
+                if (!IsOccupied(location) && GameOver() == null)
                 {
                     // set the board to contain the current player's mark
                     board[location] = (byte)(currentPlayer == 0 ?
@@ -151,7 +151,6 @@ namespace TicTacToeServer
                 board[0] + board[3] + board[6] == 264 || board[1] + board[4] + board[7] == 264 || board[2] + board[5] + board[8] == 264 ||
                 board[0] + board[4] + board[8] == 264 || board[2] + board[4] + board[6] == 264)
             {
-                DisplayMessage("\nX Vinnur");
 
                 return "X Vinnur";
             }
@@ -159,12 +158,10 @@ namespace TicTacToeServer
                 board[0] + board[3] + board[6] == 237 || board[1] + board[4] + board[7] == 237 || board[2] + board[5] + board[8] == 237 ||
                 board[0] + board[4] + board[8] == 237 || board[2] + board[4] + board[6] == 237)
 	        {
-                DisplayMessage("\nO Vinnur");
                 return "O Vinnur";
 	        }
             else if (sum == 756)
             {
-                DisplayMessage("\nJafntefli");
                 return "Jafntefli";
             }
             else

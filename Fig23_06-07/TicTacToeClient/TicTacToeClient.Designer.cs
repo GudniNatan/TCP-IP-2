@@ -27,7 +27,6 @@ partial class TicTacToeClientForm
    private void InitializeComponent()
    {
             this.idLabel = new System.Windows.Forms.Label();
-            this.displayTextBox = new System.Windows.Forms.TextBox();
             this.board0Panel = new System.Windows.Forms.Panel();
             this.board3Panel = new System.Windows.Forms.Panel();
             this.board6Panel = new System.Windows.Forms.Panel();
@@ -38,6 +37,7 @@ partial class TicTacToeClientForm
             this.board5Panel = new System.Windows.Forms.Panel();
             this.board2Panel = new System.Windows.Forms.Panel();
             this.Newg_button = new System.Windows.Forms.Button();
+            this.displayTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // idLabel
@@ -48,16 +48,6 @@ partial class TicTacToeClientForm
             this.idLabel.Size = new System.Drawing.Size(69, 13);
             this.idLabel.TabIndex = 0;
             this.idLabel.Text = "connecting...";
-            // 
-            // displayTextBox
-            // 
-            this.displayTextBox.Location = new System.Drawing.Point(12, 183);
-            this.displayTextBox.Multiline = true;
-            this.displayTextBox.Name = "displayTextBox";
-            this.displayTextBox.ReadOnly = true;
-            this.displayTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.displayTextBox.Size = new System.Drawing.Size(268, 71);
-            this.displayTextBox.TabIndex = 1;
             // 
             // board0Panel
             // 
@@ -161,11 +151,21 @@ partial class TicTacToeClientForm
             this.Newg_button.UseVisualStyleBackColor = true;
             this.Newg_button.Click += new System.EventHandler(this.Newg_button_Click);
             // 
+            // displayTextBox
+            // 
+            this.displayTextBox.Location = new System.Drawing.Point(13, 183);
+            this.displayTextBox.Name = "displayTextBox";
+            this.displayTextBox.ReadOnly = true;
+            this.displayTextBox.Size = new System.Drawing.Size(267, 71);
+            this.displayTextBox.TabIndex = 7;
+            this.displayTextBox.Text = "";
+            // 
             // TicTacToeClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 295);
+            this.Controls.Add(this.displayTextBox);
             this.Controls.Add(this.Newg_button);
             this.Controls.Add(this.board8Panel);
             this.Controls.Add(this.board7Panel);
@@ -176,7 +176,6 @@ partial class TicTacToeClientForm
             this.Controls.Add(this.board3Panel);
             this.Controls.Add(this.board1Panel);
             this.Controls.Add(this.board0Panel);
-            this.Controls.Add(this.displayTextBox);
             this.Controls.Add(this.idLabel);
             this.Name = "TicTacToeClientForm";
             this.Text = "Tic Tac Toe Client";
@@ -191,7 +190,6 @@ partial class TicTacToeClientForm
    #endregion
 
    private System.Windows.Forms.Label idLabel;
-   private System.Windows.Forms.TextBox displayTextBox;
    private System.Windows.Forms.Panel board0Panel;
    private System.Windows.Forms.Panel board3Panel;
    private System.Windows.Forms.Panel board6Panel;
@@ -202,5 +200,6 @@ partial class TicTacToeClientForm
    private System.Windows.Forms.Panel board5Panel;
    private System.Windows.Forms.Panel board2Panel;
    private System.Windows.Forms.Button Newg_button;
+   private System.Windows.Forms.RichTextBox displayTextBox;
 }
 
