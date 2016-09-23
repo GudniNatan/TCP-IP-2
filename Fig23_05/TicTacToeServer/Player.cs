@@ -90,22 +90,33 @@ namespace TicTacToeServer
                 while (connection.Available == 0)
                 {
                     Thread.Sleep(100);
-
                     if (server.disconnected)
                         return;
                 } // end while
 
-                // receive data                   
-                int location = reader.ReadInt32();
-
+                // receive data
+                string message = reader.ReadString();
+                int location = -1;
+                if (message.Split().Length == 2 && message.Split()[0] == "loc" && int.TryParse(message.Split()[1], out location))
+                {
+                    location = Convert.ToInt32(message.Split()[1]);                    
+                }
+                else if (message == "RESTART")
+                {
+                    server.Restart();
+                }
+                else if (message == "EXIT")
+                {
+                    done = true;
+                }
                 // if the move is valid, display the move on the
                 // server and signal that the move is valid
-                if (server.ValidMove(location, number))
+                if (location != -1 && server.ValidMove(location, number))
                 {
                     server.DisplayMessage("loc: " + location + "\r\n");
                     writer.Write("Valid move.");
                 } // end if
-                else // signal that the move is invalid
+                else if (location != -1) // signal that the move is invalid
                     writer.Write("Invalid move, try again.");
 
                 // if game is over, set done to true to exit while loop
@@ -113,7 +124,6 @@ namespace TicTacToeServer
                 if (server.GameOver() != null)
                 {
                     writer.Write(server.GameOver());
-                    done = true;
                 }
             } // end while loop
 
@@ -123,5 +133,9 @@ namespace TicTacToeServer
             socketStream.Close();
             connection.Close();
         } // end method Run
+        public void Message(string message)
+        {
+            writer.Write(message);
+        }
     } // end class Player
 }

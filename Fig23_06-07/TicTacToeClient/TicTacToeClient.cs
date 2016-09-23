@@ -68,6 +68,10 @@ public partial class TicTacToeClientForm : Form
    private void TicTacToeClientForm_FormClosing( object sender, 
       FormClosingEventArgs e )
    {
+       if (connection.Connected)
+       {
+           writer.Write("EXIT");
+       }
       done = true;                                           
       System.Environment.Exit( System.Environment.ExitCode );
    } // end TicTacToeClientForm_FormClosing
@@ -110,6 +114,30 @@ public partial class TicTacToeClientForm : Form
       } // end if
       else // OK to modify idLabel in current thread
          idLabel.Text = label;
+   } // end method ChangeIdLabel
+
+   private delegate void ToggleNewGButtonDelegate();
+
+   // method ChangeIdLabel sets displayTextBox's Text property
+   // in a thread-safe manner
+   private void ToggleNewGButton()
+   {
+       // if modifying idLabel is not thread safe
+       if (Newg_button.InvokeRequired)
+       {
+           // use inherited method Invoke to execute ChangeIdLabel
+           // via a delegate                                       
+           Invoke(new ToggleNewGButtonDelegate(ToggleNewGButton));
+       } // end if
+       else // OK to modify idLabel in current thread
+       {
+           if (Newg_button.Enabled)
+           {
+               Newg_button.Enabled = false;
+           }
+           else
+               Newg_button.Enabled = true;
+       }
    } // end method ChangeIdLabel
 
    // draws the mark of each square
@@ -212,7 +240,7 @@ public partial class TicTacToeClientForm : Form
       } // end else if
       else if (message == "X Vinnur")
       {
-          Newg_button.Enabled = true;
+          ToggleNewGButton();
           if (myMark == 'X')
           {
               DisplayMessage("Þú Vannst!" + "\r\n");
@@ -224,7 +252,7 @@ public partial class TicTacToeClientForm : Form
       }
       else if (message == "O Vinnur")
       {
-          Newg_button.Enabled = true;
+          ToggleNewGButton();
           if (myMark == 'O')
           {
               DisplayMessage("Þú Vannst!" + "\r\n");
@@ -237,8 +265,12 @@ public partial class TicTacToeClientForm : Form
       }
       else if (message == "Jafntefli")
       {
-          Newg_button.Enabled = true;
+          ToggleNewGButton();
           DisplayMessage("Jafntefli");
+      }
+      else if (message == "RESTART")
+      {
+          Restart();
       }
       else
          DisplayMessage( message + "\r\n" ); // display message
@@ -251,7 +283,7 @@ public partial class TicTacToeClientForm : Form
       if ( myTurn )
       {
          // send the location of the move to the server
-         writer.Write( location );                     
+         writer.Write("loc " + location );                     
 
          // it is now the other player's turn
          myTurn = false;
@@ -269,9 +301,13 @@ public partial class TicTacToeClientForm : Form
 
    private void Newg_button_Click(object sender, EventArgs e)
    {
-       
+       writer.Write("RESTART");
    }
 
+   public void Restart()
+   {
+       ToggleNewGButton();
+   }
     // end property CurrentSquare
 } // end class TicTacToeClientForm
 

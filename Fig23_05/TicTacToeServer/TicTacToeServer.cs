@@ -170,6 +170,15 @@ namespace TicTacToeServer
             else
                 return null;
         } // end method GameOver
+        public void Restart()
+        {
+            board = new byte[9];
+            currentPlayer = 0;
+            foreach (var player in players)
+            {
+                player.Message("RESTART");
+            }
+        }
     } // end class TicTacToeServerForm
 }
 
